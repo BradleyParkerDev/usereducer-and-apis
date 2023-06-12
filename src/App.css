@@ -6,12 +6,12 @@ body{
 #container{
     height: 100vh;
     width: 100%;
-    border: dashed black 2px;
+    border: solid black 2px;
 }
 #div1{
     height: 10%;
     width: 100%;
-    border: dashed black 2px; 
+    border: solid black 1px; 
     
     /* display: flex; */
     /* align-content: space-evenly; */
@@ -21,5 +21,6 @@ body{
 #div2{
     height: 90%;
     width: 100%;
-    border: dashed black 2px; 
+    overflow-y: scroll; /* Add vertical scrollbar */    
+    /* border: solid black 1px;  */
 }

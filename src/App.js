@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useReducer, useEffect } from 'react';
 import requestReducer from './reducers/requestReducer';
+import DisplayCard from './components/DisplayCard/DisplayCard';
 
 function App(props) {
 
@@ -8,9 +9,9 @@ function App(props) {
   const [request, dispatch] = useReducer(requestReducer, 0)
 
   //States
-  const [posts, setPosts] = useState({});
-  const [todos, setTodos] = useState({});
-  const [users, setUsers] = useState({});
+  const [posts, setPosts] = useState([]);
+  const [todos, setTodos] = useState([]);
+  const [users, setUsers] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [requestType, setRequestType] = useState("posts");
   const [shouldRefresh, setShouldRefresh] = useState(false);
@@ -22,12 +23,28 @@ function App(props) {
       const getAllPosts = async () =>{
         const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${inputValue}`);
         const data = await response.json();
-        console.log(data);
-        setPosts(data);
+        // console.log(data);
+
+        // if(data.length > 1){
+        //   setPosts(data[0]);
+          
+        
+        // }
+        if(typeof data === "object" && data.length > 0){
+          setPosts([...data]);
+        }else{
+          setPosts([data])
+        }
+
+
+        
+
+
         setShouldRefresh(false);
         
       }
       getAllPosts();
+      console.log(posts)
     }
 
     if(request === 2){
@@ -35,7 +52,12 @@ function App(props) {
         const response = await fetch(`https://jsonplaceholder.typicode.com/todos/${inputValue}`);
         const data = await response.json();
         console.log(data);
-        setTodos(data);
+
+        if(typeof data === "object" && data.length > 0){
+          setTodos([...data]);
+        }else{
+          setTodos([data])
+        }
         setShouldRefresh(false);
 
       }
@@ -48,7 +70,11 @@ function App(props) {
         const response = await fetch(`https://jsonplaceholder.typicode.com/users/${inputValue}`);
         const data = await response.json();
         console.log(data);
-        setUsers(data);
+        if(typeof data === "object" && data.length > 0){
+          setUsers([...data]);
+        }else{
+          setUsers([data])
+        }
         setShouldRefresh(false);
 
       } 
@@ -73,9 +99,8 @@ function App(props) {
   }
 
   const handleDispatch = () =>{
-    dispatch({requestType: requestType})
-
     setShouldRefresh(true)
+    dispatch({requestType: requestType})
 
   }
 
@@ -102,7 +127,10 @@ function App(props) {
         </button>
       </div>
       <div id="div2">
-
+        
+        {request === 1 && posts.map(post=>(<DisplayCard post = {post} request = {request}/>))}
+        {request === 2 && todos.map(todo=>(<DisplayCard todo = {todo} request = {request}/>))}
+        {request === 3 && users.map(user=>(<DisplayCard user = {user} request = {request}/>))}
       </div>      
     </div>
 
